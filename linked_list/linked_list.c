@@ -54,16 +54,13 @@ void FreeList(Node *head){
     free(head);
 }
 
-int main(){
-    // creating initial list of nodes: includes 50 nodes
-    Node NodeA = GenList(50);
-    
+void PrintStats(const char *algorithm, Node *NodeA, Node *(*func)(Node *)){
     clock_t begin = clock();
-    puts("Before Merge Sort:");
-    IterateNodes(&NodeA);
+    printf("Before %s:\n", algorithm);
+    IterateNodes(NodeA);
 
-    puts("\nAfter Merge Sort:");
-    Node *Head = MergeSort(&NodeA);
+    printf("\nAfter %s:\n", algorithm);
+    Node *Head = func(NodeA);
     IterateNodes(Head);
     puts("");
     Head = Reverse(Head);
@@ -72,59 +69,22 @@ int main(){
     clock_t end = clock();
     double length = (end - begin)/ CLOCKS_PER_SEC;
     printf("Time to sort: %f seconds\n", length);
-    puts("\n======================================================");
-
-    begin = clock();
-    puts("Before Selection Sort: ");
-    RandmonValues(Head);
-    IterateNodes(Head);
-
-    puts("\nAfter Selection Sort: ");
-    Head = SelectionSort(Head);
-    IterateNodes(Head);
-    puts("");
-    Head = Reverse(Head);
-    IterateNodes(Head);
-
-    end = clock();
-    length = (end - begin)/CLOCKS_PER_SEC;
-    printf("Time to sort: %f seconds\n", length);
-    puts("\n======================================================");
-
-
-    begin = clock();
-    puts("Before Bubble Sort: ");
-    RandmonValues(Head);
-    IterateNodes(Head);
-
-    puts("\nAfter Bubble Sort: ");
-    Head = BubbleSort(Head);
-    IterateNodes(Head);
-    puts("");
-    Head = Reverse(Head);
-    IterateNodes(Head);
-
-    end = clock();
-    length = (end - begin)/CLOCKS_PER_SEC;
-    printf("Time to sort: %f seconds\n", length);
-    puts("\n======================================================");
+    puts("\n==============================================================================================================================");
+}
+int main(){
+    // creating initial list of nodes: includes 50 nodes
+    Node NodeA = GenList(50);
     
+    PrintStats("Merge Sort", &NodeA, MergeSort);
+    RandmonValues(&NodeA);
 
-    begin = clock();
-    puts("Before QuickSort: ");
-    RandmonValues(Head);
-    IterateNodes(Head);
+    PrintStats("Selection Sort", &NodeA, SelectionSort);
+    RandmonValues(&NodeA);
 
-    puts("\nAfter QuickSort: ");
-    Head = QuickSort(Head);
-    IterateNodes(Head);
-    puts("");
-    Head = Reverse(Head);
-    IterateNodes(Head);
+    PrintStats("Bubble Sort", &NodeA, BubbleSort);
+    RandmonValues(&NodeA);
 
-    end = clock();
-    length = (end - begin)/CLOCKS_PER_SEC;
-    printf("Time to sort: %f seconds", length);
+    PrintStats("QuickSort", &NodeA, QuickSort);
 
     FreeList(&NodeA);
     return 0;
