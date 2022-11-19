@@ -41,7 +41,7 @@ Node GenList(int length){
         Node n = {rand() % UINT_MAX, NULL};
         return n;
     }
-    Node *next = malloc(sizeof(Node));
+    Node *next = (Node *)malloc(sizeof(Node));
     *next = GenList(length - 1);
     Node n = {rand() % UINT_MAX, next}; 
     return n;
@@ -71,6 +71,8 @@ void PrintStats(const char *algorithm, Node *NodeA, Node *(*func)(Node *)){
     printf("Time to sort: %f seconds\n", length);
     puts("\n==============================================================================================================================");
 }
+
+
 int main(){
     // creating initial list of nodes: includes 50 nodes
     Node NodeA = GenList(50);
@@ -86,7 +88,8 @@ int main(){
 
     PrintStats("QuickSort", &NodeA, QuickSort);
 
-    FreeList(&NodeA);
+    FreeList(NodeA.next);
+    NodeA.next = NULL;
     return 0;
 }
 
