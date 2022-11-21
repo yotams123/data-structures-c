@@ -35,15 +35,11 @@ Node *Reverse(Node *Head){
     return last;
 }
 
-Node GenList(int);
-Node GenList(int length){
-    if (length == 0){
-        Node n = {rand() % UINT_MAX, NULL};
-        return n;
-    }
-    Node *next = (Node *)malloc(sizeof(Node));
-    *next = GenList(length - 1);
-    Node n = {rand() % UINT_MAX, next}; 
+Node *GenList(int);
+Node *GenList(int length){
+    Node *n = (Node *)malloc(sizeof(Node));
+    n->data = rand() % UINT_MAX;
+    if (length <= 1) {n->next = NULL;} else {n->next = GenList(length - 1);}
     return n;
 }
 
@@ -54,7 +50,7 @@ void FreeList(Node *head){
     free(head);
 }
 
-void PrintStats(const char *algorithm, Node *NodeA, Node *(*func)(Node *)){
+Node *PrintStats(const char *algorithm, Node *NodeA, Node *(*func)(Node *)){
     clock_t begin = clock();
     printf("Before %s:\n", algorithm);
     IterateNodes(NodeA);
@@ -70,26 +66,27 @@ void PrintStats(const char *algorithm, Node *NodeA, Node *(*func)(Node *)){
     double length = (end - begin)/ CLOCKS_PER_SEC;
     printf("Time to sort: %f seconds\n", length);
     puts("\n==============================================================================================================================");
+    return Head;
 }
 
 
 int main(){
     // creating initial list of nodes: includes 50 nodes
-    Node NodeA = GenList(50);
+    Node *NodeA = GenList(50);
     
-    PrintStats("Merge Sort", &NodeA, MergeSort);
-    RandmonValues(&NodeA);
+    NodeA = PrintStats("Merge Sort", NodeA, MergeSort);
+    RandmonValues(NodeA);
 
-    PrintStats("Selection Sort", &NodeA, SelectionSort);
-    RandmonValues(&NodeA);
+    NodeA = PrintStats("Selection Sort", NodeA, SelectionSort);
+    RandmonValues(NodeA);
 
-    PrintStats("Bubble Sort", &NodeA, BubbleSort);
-    RandmonValues(&NodeA);
+    NodeA = PrintStats("Bubble Sort", NodeA, BubbleSort);
+    RandmonValues(NodeA);
 
-    PrintStats("QuickSort", &NodeA, QuickSort);
+    NodeA = PrintStats("QuickSort", NodeA, QuickSort);
 
-    FreeList(NodeA.next);
-    NodeA.next = NULL;
+    FreeList(NodeA);
+    NodeA = NULL;
     return 0;
 }
 
