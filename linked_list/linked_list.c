@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <string.h>
 
 #include "sorting.h"
 
@@ -38,6 +39,11 @@ Node *Reverse(Node *Head){
 Node *GenList(int);
 Node *GenList(int length){
     Node *n = (Node *)malloc(sizeof(Node));
+    if (!n){
+        puts("Failed to allocate memory on the heap");
+        exit (-1);
+    }
+
     n->data = rand() % UINT_MAX;
     if (length <= 1) {n->next = NULL;} else {n->next = GenList(length - 1);}
     return n;
@@ -69,10 +75,26 @@ Node *PrintStats(const char *algorithm, Node *NodeA, Node *(*func)(Node *)){
     return Head;
 }
 
-
-int main(){
+int main(int argc, char *argv[]){
     // creating initial list of nodes: includes 50 nodes
-    Node *NodeA = GenList(50);
+    
+    if (argc != 2) {
+        puts("Program must have one integer arg passed");
+        exit(-1);
+    }
+
+    int arglen = strlen(argv[1]);
+    int listlen = 0;
+    for (size_t i = 0; i < arglen; i++){
+        if (argv[1][i] < '0' || argv[1][i] > '9'){
+            puts("Arg must be integer value");
+            exit(-1);
+        }
+        listlen *= 10;
+        listlen += argv[1][i] - '0';
+    }
+
+    Node *NodeA = GenList(listlen);
     
     NodeA = PrintStats("Merge Sort", NodeA, MergeSort);
     RandmonValues(NodeA);
