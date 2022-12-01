@@ -6,6 +6,11 @@
 #include "sorting.h"
 
 void IterateNodes(Node *head){
+    if (!head) {
+        puts("null");
+        return;
+    }
+
     while (head->next != NULL){
         printf("%u --> ", head->data);
         head = head->next;
@@ -15,6 +20,8 @@ void IterateNodes(Node *head){
 }
 
 Node *Reverse(Node *Head){
+    if (!Head) return NULL;
+
     Node *curr = Head, *last = Head->next;
     
     if (!last) return Head; //one node in list
@@ -38,21 +45,26 @@ Node *Reverse(Node *Head){
 
 Node *GenList(int);
 Node *GenList(int length){
+    if (length <= 0) return NULL;
+
     Node *n = (Node *)malloc(sizeof(Node));
     if (!n){
         puts("Failed to allocate memory on the heap");
+        
         exit (-1);
     }
 
     n->data = rand() % UINT_MAX;
-    if (length <= 1) {n->next = NULL;} else {n->next = GenList(length - 1);}
+    n->next = GenList(length - 1);
+    
     return n;
 }
 
 
 void FreeList(Node *);
 void FreeList(Node *head){
-    if (head->next) FreeList(head->next);
+    if (!head) return;
+    FreeList(head->next);
     free(head);
 }
 
@@ -84,7 +96,7 @@ int main(int argc, char *argv[]){
     }
 
     int arglen = strlen(argv[1]);
-    int listlen = 0;
+    unsigned listlen = 0;
     for (size_t i = 0; i < arglen; i++){
         if (argv[1][i] < '0' || argv[1][i] > '9'){
             puts("Arg must be integer value");
@@ -93,7 +105,6 @@ int main(int argc, char *argv[]){
         listlen *= 10;
         listlen += argv[1][i] - '0';
     }
-
     Node *NodeA = GenList(listlen);
     
     NodeA = PrintStats("Merge Sort", NodeA, MergeSort);

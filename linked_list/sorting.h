@@ -10,15 +10,17 @@ typedef struct node{
 
 
 void RandmonValues(Node *head){
+    if (!head) return;
     head->data = rand() % UINT_MAX;
-    if (head->next) RandmonValues(head->next);
+    RandmonValues(head->next);
 }
 
 static unsigned short CountNodes(Node *curr){
-    if (curr->next != NULL){
+
+    if (curr){
         return CountNodes(curr->next) + 1;
     }
-    return 1;
+    return 0;
 }
 
 
@@ -27,6 +29,7 @@ static Node *Merge(Node *, Node *);
 Node *MergeSort(Node *ORIGINAL_HEAD){
     unsigned short length = CountNodes(ORIGINAL_HEAD);
     if (length == 1) return ORIGINAL_HEAD;
+    if (length < 1) return NULL;
 
     unsigned short left_length = length / 2;
     unsigned short i = 1;
@@ -90,6 +93,8 @@ static Node *FindBeforeMin(Node *head){  // need to find the node before to exct
 }
 
 Node *SelectionSort(Node *head){
+    if (!head) return NULL;
+
     Node *unsorted = head; // holds head of unsorted part
 
     Node *before_new_insert = FindBeforeMin(head);
@@ -119,7 +124,8 @@ Node *SelectionSort(Node *head){
 
 
 Node *BubbleSort(Node *head){
-    
+    if (!head) return NULL;
+
     Node *new_head = head;
     Node *curr = new_head;
     bool sorted = true;
@@ -156,6 +162,7 @@ Node *BubbleSort(Node *head){
 
 
 Node *QuickSort(Node *head){ // uses head as pivot
+    if (!head) return NULL;
     if (!(head->next)) return head;
     
     Node *curr = head;
