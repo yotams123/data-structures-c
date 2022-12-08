@@ -16,31 +16,17 @@ void IterateNodes(Node *head){
         head = head->next;
     }
     printf("%u\n", head->data);
-    return;
 }
 
 Node *Reverse(Node *Head){
-    if (!Head) return NULL;
-
-    Node *curr = Head, *last = Head->next;
-    
-    if (!last) return Head; //one node in list
-
-    while(last->next){  // getting the first node in reversed list in order to return it later
-        curr = curr->next;
-        last = last->next;
-    }
-    last->next = curr;
-
-    while (curr != Head){
-     curr = Head;
-        while (curr->next->next->next != curr->next){ //eg. (curr=7   7-->8-->9-->8 will stop the loop
-         curr = curr->next;
-        }
-     curr->next->next = curr;
-    }
-    curr->next = NULL; 
-    return last;
+	if (!Head) return NULL;
+	if (!(Head->next)) return Head;
+	
+	Node *tail = Reverse(Head->next);
+	Head->next->next = Head;
+	Head->next = NULL;  // will be undone for all nodes but the first in the original list 
+	
+	return tail;
 }
 
 Node *GenList(int);

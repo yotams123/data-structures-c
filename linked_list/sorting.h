@@ -9,7 +9,7 @@ typedef struct node{
 } Node;
 
 
-void RandmonValues(Node *head){
+void RandmonValues(Node *head){	
     if (!head) return;
     head->data = rand() % UINT_MAX;
     RandmonValues(head->next);
@@ -27,6 +27,11 @@ static unsigned short CountNodes(Node *curr){
 
 static Node *Merge(Node *, Node *);
 Node *MergeSort(Node *ORIGINAL_HEAD){
+    // An algorithm that sorts by splitting the list into 2 halves.
+    // It splits those halves, and so on until units of one node are reached.
+    // Then, the nodes are merged together in a sorted way. 
+    // The new lists are merged themselves, and so on
+
     unsigned short length = CountNodes(ORIGINAL_HEAD);
     if (length == 1) return ORIGINAL_HEAD;
     if (length < 1) return NULL;
@@ -93,6 +98,11 @@ static Node *FindBeforeMin(Node *head){  // need to find the node before to exct
 }
 
 Node *SelectionSort(Node *head){
+/* A sorting algorithm where the minimal value is
+chosen and moved to the start of the list.
+This process is repeated until the unsorted part of the
+list is NULL
+*/
     if (!head) return NULL;
 
     Node *unsorted = head; // holds head of unsorted part
@@ -101,7 +111,10 @@ Node *SelectionSort(Node *head){
     Node *new_head = before_new_insert->next;
 
     before_new_insert->next = before_new_insert->next->next;
+    
+    if (unsorted == new_head) unsorted = unsorted->next; // if head is minimum value
     new_head->next = unsorted;
+
     Node *new_head_curr = new_head; // to hold the last node of the sorted part
 
     while (unsorted->next){
@@ -124,6 +137,11 @@ Node *SelectionSort(Node *head){
 
 
 Node *BubbleSort(Node *head){
+    /* A sorting algorithm that works by  
+	iterating through the list, swapping 
+	all adjacent unordered values. This process
+	is repeated until an iteration is complete with no swaps
+    */
     if (!head) return NULL;
 
     Node *new_head = head;
@@ -162,6 +180,15 @@ Node *BubbleSort(Node *head){
 
 
 Node *QuickSort(Node *head){ // uses head as pivot
+    /* 
+	An algorithm that sorts a list
+	by picking a pivot (in this implementation,
+	the head serves as a pivot), and moving all
+	values smaller than the pivot before it. Then
+	the two parts (smaller than pivot, larger than pivot)
+	are seperated, and the process is repeated on each part
+	until sorted.
+    */
     if (!head) return NULL;
     if (!(head->next)) return head;
     
