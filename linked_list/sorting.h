@@ -11,7 +11,7 @@ typedef struct node{
 
 void RandmonValues(Node *head){	
     if (!head) return;
-    head->data = rand() % UINT_MAX;
+    head->data = rand() % USHRT_MAX;
     RandmonValues(head->next);
 }
 
