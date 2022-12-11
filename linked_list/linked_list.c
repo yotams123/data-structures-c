@@ -4,6 +4,8 @@
 #include <string.h>
 
 #include "sorting.h"
+#define SEPERATOR_SIZE 75
+char sep[SEPERATOR_SIZE];
 
 void IterateNodes(Node *head){
     if (!head) {
@@ -40,7 +42,7 @@ Node *GenList(int length){
         exit (-1);
     }
 
-    n->data = rand() % UINT_MAX;
+    n->data = rand() % USHRT_MAX;
     n->next = GenList(length - 1);
     
     return n;
@@ -69,18 +71,18 @@ Node *PrintStats(const char *algorithm, Node *NodeA, Node *(*func)(Node *)){
     clock_t end = clock();
     double length = (end - begin)/ CLOCKS_PER_SEC;
     printf("Time to sort: %f seconds\n", length);
-    puts("\n==============================================================================================================================");
+    printf("%s\n", sep);
     return Head;
 }
 
 int main(int argc, char *argv[]){
-    // creating initial list of nodes: includes 50 nodes
     
     if (argc != 2) {
         puts("Program must have one integer arg passed");
         exit(-1);
     }
-
+    
+    memset(sep, (int)'=', SEPERATOR_SIZE - 1);
     int arglen = strlen(argv[1]);
     unsigned listlen = 0;
     for (size_t i = 0; i < arglen; i++){
@@ -92,7 +94,7 @@ int main(int argc, char *argv[]){
         listlen += argv[1][i] - '0';
     }
     Node *NodeA = GenList(listlen);
-    
+   
     NodeA = PrintStats("Merge Sort", NodeA, MergeSort);
     RandmonValues(NodeA);
 
