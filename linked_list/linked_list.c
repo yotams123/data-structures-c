@@ -82,17 +82,11 @@ int main(int argc, char *argv[]){
         exit(-1);
     }
     
-    memset(sep, (int)'=', SEPERATOR_SIZE - 1);
-    int arglen = strlen(argv[1]);
-    unsigned listlen = 0;
-    for (size_t i = 0; i < arglen; i++){
-        if (argv[1][i] < '0' || argv[1][i] > '9'){
-            puts("Arg must be integer value");
-            exit(-1);
-        }
-        listlen *= 10;
-        listlen += argv[1][i] - '0';
-    }
+    memset(sep, '=', SEPERATOR_SIZE - 1);
+
+    unsigned short listlen;
+    sscanf(argv[1], "%hu", &listlen);
+
     Node *NodeA = GenList(listlen);
    
     NodeA = PrintStats("Merge Sort", NodeA, MergeSort);
@@ -110,6 +104,3 @@ int main(int argc, char *argv[]){
     NodeA = NULL;
     return 0;
 }
-
-
-
