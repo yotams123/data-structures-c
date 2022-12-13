@@ -56,23 +56,54 @@ void FreeList(Node *head){
     free(head);
 }
 
+int IsPalindrome(Node *head);
 Node *PrintStats(const char *algorithm, Node *NodeA, Node *(*func)(Node *)){
     clock_t begin = clock();
     printf("Before %s:\n", algorithm);
     IterateNodes(NodeA);
 
     printf("\nAfter %s:\n", algorithm);
-    Node *Head = func(NodeA);
-    IterateNodes(Head);
+    NodeA = func(NodeA);
+    IterateNodes(NodeA);
     puts("");
-    Head = Reverse(Head);
-    IterateNodes(Head);
+    NodeA = Reverse(NodeA);
+    IterateNodes(NodeA);
     
     clock_t end = clock();
     double length = (end - begin)/ CLOCKS_PER_SEC;
     printf("Time to sort: %f seconds\n", length);
-    printf("%s\n", sep);
-    return Head;
+    printf((IsPalindrome(NodeA))? "List is a palindrome" : "List is not a palindrome"); 
+
+    printf("\n\n%s\n\n\n", sep);
+    return NodeA;
+}
+
+Node *CopyList(Node *head){
+    if (!head) return NULL;   
+ 
+    Node *new = (Node *)malloc(sizeof(Node));
+    new->data = head->data;
+    new->next = CopyList(head->next);
+    
+    return new;
+}
+
+int IsPalindrome(Node *head){
+    Node *tmp = CopyList(head);
+    tmp = Reverse(tmp);
+    Node *tmpcurr = tmp;
+    
+    while (tmpcurr != NULL){
+         if (head->data != tmpcurr->data){
+              FreeList(tmp);
+	      return 0;
+	 }
+	 tmpcurr = tmpcurr->next;
+	 head = head->next;
+    }
+    
+    FreeList(tmp);
+    return 1;    
 }
 
 int main(int argc, char *argv[]){
@@ -99,6 +130,17 @@ int main(int argc, char *argv[]){
     RandmonValues(NodeA);
 
     NodeA = PrintStats("QuickSort", NodeA, QuickSort);
+
+    Node *CpyA = CopyList(NodeA);
+    CpyA = Reverse(CpyA);
+    Node *tmp = NodeA;  
+    while (tmp->next) tmp = tmp->next; // getting last element
+    tmp->next = CpyA;
+   
+    IterateNodes(NodeA);
+    printf((IsPalindrome(NodeA))? "List is a palindrome\n" : "List is not a palindrome\n");    
+    FreeList(CpyA);
+    CpyA = NULL;
 
     FreeList(NodeA);
     NodeA = NULL;
