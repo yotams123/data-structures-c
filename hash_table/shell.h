@@ -9,8 +9,7 @@
 #define NAME_LENGTH 30
 #define BDAY_LENGTH 11
 #define QUOTE_LENGTH 100
-const char *seperator = ";";
-//TODO: secure the inputs (buffer overflow, injection...)
+const char seperator[2] = ";";
 
 int validate_input(char *input, const char *key, int maxlen, char *field){
     int i = 0;
