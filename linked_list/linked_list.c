@@ -5,6 +5,7 @@
 
 #include "sorting.h"
 #define SEPERATOR_SIZE 75
+#define MAX_LIST_SIZE 50
 char sep[SEPERATOR_SIZE];
 
 void IterateNodes(Node *head){
@@ -65,7 +66,7 @@ Node *PrintStats(const char *algorithm, Node *NodeA, Node *(*func)(Node *)){
     printf("\nAfter %s:\n", algorithm);
     NodeA = func(NodeA);
     IterateNodes(NodeA);
-    puts("");
+    puts("\n");
     NodeA = Reverse(NodeA);
     IterateNodes(NodeA);
     
@@ -118,7 +119,7 @@ int main(int argc, char *argv[]){
     unsigned short listlen;
     sscanf(argv[1], "%hu", &listlen);
 
-    Node *NodeA = GenList(listlen);
+    Node *NodeA = GenList((listlen > MAX_LIST_SIZE)? MAX_LIST_SIZE: listlen);
    
     NodeA = PrintStats("Merge Sort", NodeA, MergeSort);
     RandmonValues(NodeA);

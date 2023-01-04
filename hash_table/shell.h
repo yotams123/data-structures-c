@@ -1,5 +1,4 @@
 #pragma once
-
 #include "hash_table.h"
 
 #include <stdio.h>
@@ -9,32 +8,42 @@
 #define NAME_LENGTH 30
 #define BDAY_LENGTH 11
 #define QUOTE_LENGTH 100
+
+static int IsNumeric(int x) { return (x >= '0' && x <= '9')? 1: 0; }
+static int IsAlpha(int x) { return ((x >= 'A' && x <= 'Z') || ( x >= 'a' && x <= 'z') )? 1: 0; }
+
 const char seperator[2] = ";";
+
+
 
 int validate_input(char *input, const char *key, int maxlen, char *field){
     int i = 0;
     char k = key[0];
     if (input == NULL) {
-        printf("Missing fields. Enter 'help' for info\n");
+        printf("Missing fields. Enter 'help' for info\n. line 21, %s", field);
         return -1;
     }
-
+    
     while (input[0] == ' ') input++;
+    int length = strlen(input);
+    
     for (; i <= maxlen; i++){
-        if (input[i] == k) {
+        if (input[i] == k || (i == length && strcmp(field, "quote") == 0) ) {
             if (i == 0){
-                printf("Invalid input. Enter 'help' for info\n");
+                printf("Invalid input. Enter 'help' for info\n.");
                 return -1;
             }
             return 0;
         }
-        if (input[i] == '\0') {
-            printf("Missing fields. Enter 'help' for info\n");
+
+        if ( i == length && strcmp(field, "quote")) { // strcmp returns true when strings aren't equal
+            printf("Missing fields. Enter 'help' for info\n. line 35 %s", field);
             return -1;
         }
 
-        if (!((input[i] <= 'z' && input[i] >= 'a') || (input[i] <= 'Z' && input[i] >= 'A') || input[i] == ' ')){
-            printf("Invalid character at position %d => %c\n", i, input[i]); // Making sure all chars are alphabetic and spaces
+        if (!( IsAlpha(input[i]) || IsNumeric(input[i]) || input[i] == ' ')){
+		if ( input[i] == '/' && strcmp(field, "bday") == 0) continue; 
+            printf("Invalid character at position %d in %s => %c\n", i, field, input[i]); // Making sure all chars are alphabetic and spaces
             return -1;
         }
         if (input[i] == ' '){
@@ -60,7 +69,6 @@ void shell_insert(char *input, item **ht){
 
     char *quote = strtok(NULL, "");
     if (validate_input(quote, "\n", QUOTE_LENGTH, "quote") == -1) return;
-    quote = strtok(NULL, "\n");
 
     insert_item(ht, name, bday, quote);
 }
@@ -85,7 +93,6 @@ void shell_update(char *input, item **ht){
 
     char *quote = strtok(NULL, "");
     if (validate_input(quote, "\n", QUOTE_LENGTH, "quote") == -1) return;
-    quote = strtok(NULL, "\n");
 
     update_item(ht, new_item(name, bday, quote));
 }
