@@ -66,9 +66,16 @@ int main(void){
         int code = read_input(line, buffsize); // success/error code after reading the input
         if (code == -1) continue;
 
-        if (strcmp(line, "exit") == 0 || strcmp(line, "quit") == 0) break;
+        if (strcmp(line, "exit") == 0 || strcmp(line, "quit") == 0 || strcmp(line, "q") == 0 || strcmp(line, "e") == 0) break;
         if (strcmp(line, "cls") == 0 || strcmp(line, "clear") == 0){
-            system("cls");
+	    #ifdef _WIN32
+            	system("cls");
+	    #endif
+
+	    #ifdef __linux__
+		system("clear");
+	    #endif
+
             continue;
         } else if (strcmp(line, "help") == 0){
             shell_print_help();
