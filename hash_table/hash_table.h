@@ -47,9 +47,9 @@ static item *new_item(char *name, char *bday, char *quote){
 }
 
 static void clear_item(item *i){
-    //free(i->name);
-    //free(i->bday);
-    //free(i->quote);
+    free(i->name);
+    free(i->bday);
+    free(i->quote);
     free(i);
 }
 
@@ -71,8 +71,12 @@ void insert_item(item **ht, char *name, char *bday, char *quote){
 
 void remove_item(item **ht, char *name){
     unsigned short index = hash_function(name, HT_BASE_SIZE);
-    item *i = NULL; //to free the item at the end
+    if (!ht[index]) {
+	printf("Item with that name does not exist in table\n");
+    return;
+    }    
 
+    item *i = NULL;
     if (strcmp(ht[index]->name, name) == 0){
         i = ht[index];
         ht[index] = ht[index]->next;
@@ -90,7 +94,8 @@ void remove_item(item **ht, char *name){
         curr->next = curr->next->next;
     }
     else{
-        puts("Item was not in table");
+        puts("Item with that name does not exist in table\n");
+	return;
     }
     clear_item(i);
     puts("Succesfully Removed");
@@ -122,6 +127,11 @@ void print_item(item **ht, char *name){
 
 void update_item(item **ht, item *i){
     short index = hash_function(i->name, HT_BASE_SIZE);
+    if (!ht[index]) {
+	printf("Item with that name does not exist in table\n");
+	return;	
+    }
+
     if (strcmp(ht[index]->name, i->name) == 0){
         i->next = ht[index]->next;
         ht[index] = i;
@@ -130,6 +140,7 @@ void update_item(item **ht, item *i){
     }
 
     item *curr = ht[index];
+
     while(curr->next && strcmp(curr->next->name, i->name) != 0){
         curr = curr->next;
     }

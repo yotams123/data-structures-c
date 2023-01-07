@@ -161,8 +161,9 @@ void shell_print_help(){
     printf("\t\tremove <name of person who's entry to remove>\n\n");
     
     printf("\tUpdate existing entry in the hash table:\n");
-    printf("\t\tinsert <name (max %d chars)>; <bday (max %d chars)>; <quote (max %d chars)>\n\n", 
+    printf("\t\tinsert <name (max %d chars)>; <bday (max %d chars)>; <quote (max %d chars)>\n", 
         NAME_LENGTH, BDAY_LENGTH, QUOTE_LENGTH);
+    printf("*to update an item's name, item must be removed and added again with name\n\n");
 
     printf("\tPrint entry in the hash table:\n");
     printf("\t\tprint <name of person who's entry to print\n\n");
@@ -171,8 +172,8 @@ void shell_print_help(){
     printf("\t\thash <string to hash>\n\n");
 
     printf("\tClear the console:\n");
-    printf("\t\t cls \t\t\t or \t\t\t clear \n\n");
+    printf("\t\t cls \t\t\t\t\t\t clear \n\n");
 
     printf("\tExit the program:\n");
-    printf("\t\t exit \t\t\t or \t\t\t quit \n");
+    printf("\t\t exit or e  \t\t\t\t\t quit or q\n");
 }
